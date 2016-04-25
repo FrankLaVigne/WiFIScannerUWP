@@ -14,9 +14,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Devices.WiFi;
 using System.Collections.ObjectModel;
-
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using Windows.UI.Popups;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace WiFIScannerUWP
 {
@@ -25,40 +25,68 @@ namespace WiFIScannerUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
-        private WiFiAdapter _firstWiFiAdapter;
+        private WiFiScanner _wifiScanner;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            InitializeScanner();
-
+            this._wifiScanner = new WiFiScanner();
         }
 
-        private async void InitializeScanner()
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            var access = await WiFiAdapter.RequestAccessAsync();
+            await InitializeScanner();
+        }
 
-            if (access != WiFiAccessStatus.Allowed)
+        private async Task InitializeScanner()
+        {
+            await this._wifiScanner.InitializeScanner();
+        }
+
+        private async void btnScan_Click(object sender, RoutedEventArgs e)
+        {
+            this.btnScan.IsEnabled = false;
+
+            await this._wifiScanner.ScanForNetworks();
+
+            var report = this._wifiScanner.WiFiAdapter.NetworkReport;
+
+            StringBuilder networkInfo = new StringBuilder();
+
+            foreach (var availableNetwork in report.AvailableNetworks)
             {
-                // permission error
-            }
-            else
-            {
-                var wifiAdapterResults = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
+                networkInfo.Append(availableNetwork.Ssid);
+                networkInfo.Append(", ");
 
-                if (wifiAdapterResults.Count >= 1)
-                {
-                    this._firstWiFiAdapter = await WiFiAdapter.FromIdAsync(wifiAdapterResults[0].Id);
-                }
-                else
-                {
-                    //error
-                }
+                networkInfo.Append(availableNetwork.SignalBars);
+                networkInfo.Append(", ");
+
+                networkInfo.Append(availableNetwork.NetworkKind);
+                networkInfo.Append(", ");
+
+                networkInfo.Append(availableNetwork.PhyKind);
+                networkInfo.Append(", ");
+
+                networkInfo.Append(availableNetwork.Uptime);
+                //networkInfo.Append(", ");
+
+                //networkInfo.Append(availableNetwork.SecuritySettings);
+
+                networkInfo.AppendLine();
             }
 
+            this.txbReport.Text = networkInfo.ToString();
+
+            this.btnScan.IsEnabled = true;
 
         }
+
+        private async Task ShowMessage(string message)
+        {
+            var dialog = new MessageDialog(message);
+            await dialog.ShowAsync();
+        }
+
     }
 }

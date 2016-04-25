@@ -5,10 +5,23 @@
     xmlns:local="using:WiFIScannerUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="Page_Loaded"
+    >
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock FontSize="36" >WiFi Scanner</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="36" Grid.RowSpan="2" >WiFi Scanner</TextBlock>
+        <Button Name="btnScan" Click="btnScan_Click" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" >Scan For Networks</Button>
+
+        <TextBox Name="txbReport" TextWrapping="Wrap" AcceptsReturn="True" Grid.Row="2"></TextBox>
         
+
+
     </Grid>
 </Page>
