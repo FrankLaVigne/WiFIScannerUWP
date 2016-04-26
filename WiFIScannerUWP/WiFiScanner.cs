@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.WiFi;
 
-namespace WiFIScannerUWP
+namespace WiFiScannerUWP
 {
     public class WiFiScanner
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{1CC8D006-B2A3-4541-8116-3956122A9432}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WiFIScannerUWP</RootNamespace>
-    <AssemblyName>WiFIScannerUWP</AssemblyName>
+    <RootNamespace>WiFiScannerUWP</RootNamespace>
+    <AssemblyName>WiFiScannerUWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -100,6 +100,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WiFiSignal.cs" />
     <Compile Include="WiFiPointData.cs" />
     <Compile Include="WiFiScanner.cs" />
   </ItemGroup>

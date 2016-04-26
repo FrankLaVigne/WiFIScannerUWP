@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Text;
 using Windows.Devices.Geolocation;
 
-namespace WiFIScannerUWP
+namespace WiFiScannerUWP
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -72,10 +72,8 @@ namespace WiFIScannerUWP
 
             foreach (var availableNetwork in report.AvailableNetworks)
             {
-
                 networkInfo.Append(availableNetwork.Bssid);
                 networkInfo.Append(", ");
-
 
                 networkInfo.Append(availableNetwork.Ssid);
                 networkInfo.Append(", ");
@@ -100,7 +98,6 @@ namespace WiFIScannerUWP
 
                 networkInfo.Append(position.Coordinate.Accuracy);
                 networkInfo.Append(", ");
-
 
                 networkInfo.Append(availableNetwork.Uptime);
                 networkInfo.Append(", ");

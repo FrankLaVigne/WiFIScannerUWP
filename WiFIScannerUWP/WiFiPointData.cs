@@ -4,26 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WiFIScannerUWP
+namespace WiFiScannerUWP
 {
     public class WiFiPointData
     {
-        public string Ssid { get; set; }
-
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
 
-        public byte SignalBars { get; set; }
-
         public DateTimeOffset Timestamp { get; }
 
-        public string NetworkKind { get; set; }
+        public List<WiFiSignal> WiFiSignals { get; set; }
 
-        public string PhysicalKind { get; set; }
-
-        public double ChannelCenterFrequencyInKilohertz { get; set; }
-
+        public WiFiPointData()
+        {
+            this.WiFiSignals = new List<WiFiSignal>();
+        }
 
     }
 }
