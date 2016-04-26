@@ -72,6 +72,11 @@ namespace WiFIScannerUWP
 
             foreach (var availableNetwork in report.AvailableNetworks)
             {
+
+                networkInfo.Append(availableNetwork.Bssid);
+                networkInfo.Append(", ");
+
+
                 networkInfo.Append(availableNetwork.Ssid);
                 networkInfo.Append(", ");
 
