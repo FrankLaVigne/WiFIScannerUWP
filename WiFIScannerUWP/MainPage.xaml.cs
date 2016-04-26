@@ -74,6 +74,7 @@ namespace WiFiScannerUWP
             {
                 Latitude = position.Coordinate.Point.Position.Latitude,
                 Longitude = position.Coordinate.Point.Position.Longitude,
+                Accuracy = position.Coordinate.Accuracy,
                 TimeStamp = position.Coordinate.Timestamp
             };
 

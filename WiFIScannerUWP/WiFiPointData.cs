@@ -15,6 +15,8 @@ namespace WiFiScannerUWP
 
         public double Longitude { get; set; }
 
+        public double Accuracy { get; set; }
+
         public DateTimeOffset TimeStamp { get; set; }
 
         public List<WiFiSignal> WiFiSignals { get; set; }
