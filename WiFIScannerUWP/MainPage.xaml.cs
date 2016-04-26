@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
 using System.Text;
+using Windows.Devices.Geolocation;
 
 namespace WiFIScannerUWP
 {
@@ -48,8 +49,23 @@ namespace WiFIScannerUWP
         {
             this.btnScan.IsEnabled = false;
 
+            StringBuilder networkInfo = await RunWifiScan();
+            this.txbReport.Text = networkInfo.ToString();
+
+            this.btnScan.IsEnabled = true;
+
+        }
+
+        private async Task<StringBuilder> RunWifiScan()
+        {
             await this._wifiScanner.ScanForNetworks();
 
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            Geolocator geolocator = new Geolocator();
+
+            Geoposition position = await geolocator.GetGeopositionAsync();
+            
             var report = this._wifiScanner.WiFiAdapter.NetworkReport;
 
             StringBuilder networkInfo = new StringBuilder();
@@ -62,24 +78,34 @@ namespace WiFIScannerUWP
                 networkInfo.Append(availableNetwork.SignalBars);
                 networkInfo.Append(", ");
 
+                networkInfo.Append(availableNetwork.NetworkRssiInDecibelMilliwatts);
+                networkInfo.Append(", ");
+
                 networkInfo.Append(availableNetwork.NetworkKind);
                 networkInfo.Append(", ");
 
                 networkInfo.Append(availableNetwork.PhyKind);
                 networkInfo.Append(", ");
 
-                networkInfo.Append(availableNetwork.Uptime);
-                //networkInfo.Append(", ");
+                networkInfo.Append(position.Coordinate.Point.Position.Latitude);
+                networkInfo.Append(", ");
 
-                //networkInfo.Append(availableNetwork.SecuritySettings);
+                networkInfo.Append(position.Coordinate.Point.Position.Longitude);
+                networkInfo.Append(", ");
+
+                networkInfo.Append(position.Coordinate.Accuracy);
+                networkInfo.Append(", ");
+
+
+                networkInfo.Append(availableNetwork.Uptime);
+                networkInfo.Append(", ");
+
+                networkInfo.Append(availableNetwork.SecuritySettings.NetworkEncryptionType);
 
                 networkInfo.AppendLine();
             }
 
-            this.txbReport.Text = networkInfo.ToString();
-
-            this.btnScan.IsEnabled = true;
-
+            return networkInfo;
         }
 
         private async Task ShowMessage(string message)
