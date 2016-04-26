@@ -8,6 +8,8 @@ namespace WiFiScannerUWP
 {
     public class WiFiSignal
     {
+        public string MacAddress { get; set; }
+
         public string Ssid { get; set; }
 
         public byte SignalBars { get; set; }

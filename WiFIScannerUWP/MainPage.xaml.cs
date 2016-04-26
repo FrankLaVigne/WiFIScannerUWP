@@ -70,8 +70,29 @@ namespace WiFiScannerUWP
 
             StringBuilder networkInfo = new StringBuilder();
 
+            var wifiPoint = new WiFiPointData()
+            {
+                Latitude = position.Coordinate.Point.Position.Latitude,
+                Longitude = position.Coordinate.Point.Position.Longitude,
+                TimeStamp = position.Coordinate.Timestamp
+            };
+
+
             foreach (var availableNetwork in report.AvailableNetworks)
             {
+                WiFiSignal wifiSignal = new WiFiSignal()
+                {
+                    MacAddress = availableNetwork.Bssid,
+                    Ssid = availableNetwork.Ssid,
+                    SignalBars = availableNetwork.SignalBars,
+                    ChannelCenterFrequencyInKilohertz = availableNetwork.ChannelCenterFrequencyInKilohertz,
+                    NetworkKind = availableNetwork.NetworkKind.ToString(),
+                    PhysicalKind = availableNetwork.PhyKind.ToString()
+                };
+
+                wifiPoint.WiFiSignals.Add(wifiSignal);
+
+
                 networkInfo.Append(availableNetwork.Bssid);
                 networkInfo.Append(", ");
 
@@ -87,7 +108,7 @@ namespace WiFiScannerUWP
                 networkInfo.Append(availableNetwork.NetworkKind);
                 networkInfo.Append(", ");
 
-                networkInfo.Append(availableNetwork.PhyKind);
+                networkInfo.Append(availableNetwork.IsWiFiDirect);
                 networkInfo.Append(", ");
 
                 networkInfo.Append(position.Coordinate.Point.Position.Latitude);

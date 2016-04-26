@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace WiFiScannerUWP
 {
+    /// <summary>
+    /// Class to contain data about a WiFi collection point
+    /// </summary>
     public class WiFiPointData
     {
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
 
-        public DateTimeOffset Timestamp { get; }
+        public DateTimeOffset TimeStamp { get; set; }
 
         public List<WiFiSignal> WiFiSignals { get; set; }
 
