@@ -49,11 +49,44 @@ namespace WiFiScannerUWP
         {
             this.btnScan.IsEnabled = false;
 
-            StringBuilder networkInfo = await RunWifiScan();
-            this.txbReport.Text = networkInfo.ToString();
+            //DispatcherTimer timer = new DispatcherTimer();
+            //timer.Interval = new TimeSpan(0, 0, 30);
+            //timer.Tick += Timer_Tick;
+            //timer.Start();
+
+
+
+            try
+            {
+                StringBuilder networkInfo = await RunWifiScan();
+                this.txbReport.Text = networkInfo.ToString();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             this.btnScan.IsEnabled = true;
 
+        }
+
+        private async void Timer_Tick(object sender, object e)
+        {
+            try
+            {
+                StringBuilder networkInfo = await RunWifiScan();
+                this.txbReport.Text = networkInfo.ToString();
+
+            }
+            catch (Exception  ex)
+            {
+
+                //throw;
+            }
+
+            //StringBuilder networkInfo = await RunWifiScan();
+            //this.txbReport.Text += networkInfo.ToString();
         }
 
         private async Task<StringBuilder> RunWifiScan()
