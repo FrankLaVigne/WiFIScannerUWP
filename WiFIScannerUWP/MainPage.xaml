@@ -17,11 +17,10 @@
         </Grid.RowDefinitions>
 
         <TextBlock FontSize="36" Grid.RowSpan="2" >WiFi Scanner</TextBlock>
-        <Button Name="btnScan" Click="btnScan_Click" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" >Scan For Networks</Button>
-
+        <StackPanel Name="spButtons" Grid.Row="1" Orientation="Horizontal">
+            <Button Name="btnScan" Click="btnScan_Click" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" >Scan For Networks</Button>
+            <Button Name="btnScanRepeatedly" Click="btnScanRepeatedly_Click" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" >Scan Repeatedly</Button>
+        </StackPanel>
         <TextBox Name="txbReport" TextWrapping="Wrap" AcceptsReturn="True" Grid.Row="2"></TextBox>
-        
-
-
     </Grid>
 </Page>

@@ -49,26 +49,26 @@ namespace WiFiScannerUWP
         {
             this.btnScan.IsEnabled = false;
 
-            //DispatcherTimer timer = new DispatcherTimer();
-            //timer.Interval = new TimeSpan(0, 0, 30);
-            //timer.Tick += Timer_Tick;
-            //timer.Start();
-
-
-
             try
             {
                 StringBuilder networkInfo = await RunWifiScan();
                 this.txbReport.Text = networkInfo.ToString();
-
             }
             catch (Exception ex)
             {
-
+                MessageDialog md = new MessageDialog(ex.Message);
+                await md.ShowAsync();
             }
 
             this.btnScan.IsEnabled = true;
+        }
 
+        private async void btnScanRepeatedly_Click(object sender, RoutedEventArgs e)
+        {
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
         private async void Timer_Tick(object sender, object e)
@@ -76,32 +76,23 @@ namespace WiFiScannerUWP
             try
             {
                 StringBuilder networkInfo = await RunWifiScan();
-                this.txbReport.Text = networkInfo.ToString();
-
+                this.txbReport.Text = this.txbReport.Text + networkInfo.ToString();
             }
             catch (Exception  ex)
             {
-
-                //throw;
+                MessageDialog md = new MessageDialog(ex.Message);
+                await md.ShowAsync();
             }
-
-            //StringBuilder networkInfo = await RunWifiScan();
-            //this.txbReport.Text += networkInfo.ToString();
         }
 
         private async Task<StringBuilder> RunWifiScan()
         {
             await this._wifiScanner.ScanForNetworks();
 
-            var accessStatus = await Geolocator.RequestAccessAsync();
-
             Geolocator geolocator = new Geolocator();
-
             Geoposition position = await geolocator.GetGeopositionAsync();
-            
-            var report = this._wifiScanner.WiFiAdapter.NetworkReport;
 
-            StringBuilder networkInfo = new StringBuilder();
+            WiFiNetworkReport report = this._wifiScanner.WiFiAdapter.NetworkReport;
 
             var wifiPoint = new WiFiPointData()
             {
@@ -110,7 +101,6 @@ namespace WiFiScannerUWP
                 Accuracy = position.Coordinate.Accuracy,
                 TimeStamp = position.Coordinate.Timestamp
             };
-
 
             foreach (var availableNetwork in report.AvailableNetworks)
             {
@@ -121,44 +111,33 @@ namespace WiFiScannerUWP
                     SignalBars = availableNetwork.SignalBars,
                     ChannelCenterFrequencyInKilohertz = availableNetwork.ChannelCenterFrequencyInKilohertz,
                     NetworkKind = availableNetwork.NetworkKind.ToString(),
-                    PhysicalKind = availableNetwork.PhyKind.ToString()
+                    PhysicalKind = availableNetwork.PhyKind.ToString(),
+                    Encryption = availableNetwork.SecuritySettings.NetworkEncryptionType.ToString()
                 };
 
                 wifiPoint.WiFiSignals.Add(wifiSignal);
+            }
 
+            StringBuilder networkInfo = CreateCsvReport(wifiPoint);
 
-                networkInfo.Append(availableNetwork.Bssid);
-                networkInfo.Append(", ");
+            return networkInfo;
+        }
 
-                networkInfo.Append(availableNetwork.Ssid);
-                networkInfo.Append(", ");
+        private StringBuilder CreateCsvReport(WiFiPointData wifiPoint)
+        {
+            StringBuilder networkInfo = new StringBuilder();
+            networkInfo.AppendLine("MAC,SSID,SignalBars,Type,Lat,Long,Accuracy,Encryption");
 
-                networkInfo.Append(availableNetwork.SignalBars);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(availableNetwork.NetworkRssiInDecibelMilliwatts);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(availableNetwork.NetworkKind);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(availableNetwork.IsWiFiDirect);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(position.Coordinate.Point.Position.Latitude);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(position.Coordinate.Point.Position.Longitude);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(position.Coordinate.Accuracy);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(availableNetwork.Uptime);
-                networkInfo.Append(", ");
-
-                networkInfo.Append(availableNetwork.SecuritySettings.NetworkEncryptionType);
-
+            foreach (var wifiSignal in wifiPoint.WiFiSignals)
+            {
+                networkInfo.Append($"{wifiSignal.MacAddress},");
+                networkInfo.Append($"{wifiSignal.Ssid},");
+                networkInfo.Append($"{wifiSignal.SignalBars},");
+                networkInfo.Append($"{wifiSignal.NetworkKind},");
+                networkInfo.Append($"{wifiPoint.Latitude},");
+                networkInfo.Append($"{wifiPoint.Longitude},");
+                networkInfo.Append($"{wifiPoint.Accuracy},");
+                networkInfo.Append($"{wifiSignal.Encryption}");
                 networkInfo.AppendLine();
             }
 

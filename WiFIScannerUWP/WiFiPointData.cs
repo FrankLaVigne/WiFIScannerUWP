@@ -11,13 +11,13 @@ namespace WiFiScannerUWP
     /// </summary>
     public class WiFiPointData
     {
-        public double Latitude { get; set; }
-
-        public double Longitude { get; set; }
-
-        public double Accuracy { get; set; }
-
         public DateTimeOffset TimeStamp { get; set; }
+
+        public double? Latitude { get; set; }
+
+        public double? Longitude { get; set; }
+
+        public double? Accuracy { get; set; }
 
         public List<WiFiSignal> WiFiSignals { get; set; }
 
@@ -25,6 +25,5 @@ namespace WiFiScannerUWP
         {
             this.WiFiSignals = new List<WiFiSignal>();
         }
-
     }
 }

@@ -20,6 +20,8 @@ namespace WiFiScannerUWP
 
         public double ChannelCenterFrequencyInKilohertz { get; set; }
 
+        public string Encryption { get; set; }
+
         //TODO: add security details
     }
 }

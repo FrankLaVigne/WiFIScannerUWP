@@ -54,8 +54,6 @@ namespace WiFiScannerUWP
                     throw new Exception("WiFi Adapter not found.");
                 }
             }
-
-
         }
 
 
